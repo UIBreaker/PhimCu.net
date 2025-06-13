@@ -748,3 +748,4 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error("Lỗi khởi tạo MovieApp:", error);
   }
 });
+/////////////////////////////////////////////////////////////////////////////////

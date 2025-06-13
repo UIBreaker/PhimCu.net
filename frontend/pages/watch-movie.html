@@ -313,8 +313,13 @@
           document.querySelectorAll(".episode-btn").forEach((button) => {
             button.addEventListener("click", () => {
               const episode = button.dataset.episode;
-              videoPlayer.src = movie.episodeLinks[episode];
+              videoPlayer.src = movie.episodeLinks[episode]; // Cập nhật nguồn video
               currentEpisode.textContent = `Đang xem: Tập ${episode}`;
+              // Đặt lại thời gian phát về 0 (đảm bảo video phát từ đầu)
+              videoPlayer.contentWindow.postMessage(
+                '{"event":"command","func":"seekTo","args":[0, true]}',
+                "*"
+              );
             });
           });
 
@@ -330,6 +335,15 @@
         updateAverageRating();
         updateUserRating();
         renderComments();
+      });
+      document.querySelectorAll(".episode-btn").forEach((button) => {
+        button.addEventListener("click", () => {
+          const episode = button.dataset.episode;
+          videoPlayer.src = movie.episodeLinks[episode];
+          currentEpisode.textContent = `Đang xem: Tập ${episode}`;
+          videoPlayer.currentTime = 0; // Đặt lại thời gian về 0
+          videoPlayer.play(); // Phát video ngay lập tức
+        });
       });
     </script>
   </body>

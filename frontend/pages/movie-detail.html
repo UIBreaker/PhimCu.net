@@ -30,101 +30,203 @@
         <section class="movie-detail-section">
           <h2 class="section-title">Chi Tiết Phim</h2>
           <div class="movie-detail-content">
-            <img src="" alt="Poster" id="detailPoster" class="movie-poster" />
+            <img
+              src=""
+              alt="Poster phim"
+              id="detailPoster"
+              class="movie-poster"
+              loading="lazy"
+            />
             <div class="movie-info">
               <h3 id="detailTitle"></h3>
               <p>
-                <strong>Trạng thái:</strong> <span id="detailStatus">??</span>
+                <strong>Trạng thái:</strong>
+                <span id="detailStatus">Chưa có thông tin</span>
               </p>
               <p>
-                <strong>Số tập:</strong> <span id="detailEpisodes">??</span>
+                <strong>Số tập:</strong>
+                <span id="detailEpisodes">Chưa có thông tin</span>
               </p>
               <p>
-                <strong>Thời lượng:</strong> <span id="detailDuration">??</span>
+                <strong>Thời lượng:</strong>
+                <span id="detailDuration">Chưa có thông tin</span>
               </p>
               <p>
                 <strong>Tên tiếng Anh:</strong>
-                <span id="detailAltTitle">??</span>
+                <span id="detailAltTitle">Chưa có thông tin</span>
               </p>
               <p>
-                <strong>Mô tả:</strong> <span id="detailDescription">??</span>
+                <strong>Mô tả:</strong>
+                <span id="detailDescription">Chưa có thông tin</span>
               </p>
               <p>
-                <strong>Định dạng:</strong> <span id="detailFormat">??</span>
+                <strong>Định dạng:</strong>
+                <span id="detailFormat">Chưa có thông tin</span>
               </p>
               <p>
-                <strong>Phụ đề:</strong> <span id="detailSubtitles">??</span>
+                <strong>Phụ đề:</strong>
+                <span id="detailSubtitles">Chưa có thông tin</span>
               </p>
               <p>
-                <strong>Doanh mục:</strong> <span id="detailCategory">??</span>
+                <strong>Doanh mục:</strong>
+                <span id="detailCategory">Chưa có thông tin</span>
               </p>
               <p>
-                <strong>Thuộc phim:</strong> <span id="detailType">??</span>
+                <strong>Thuộc phim:</strong>
+                <span id="detailType">Chưa có thông tin</span>
               </p>
               <p>
-                <strong>Phim có hot:</strong> <span id="detailHot">??</span>
+                <strong>Phim có hot:</strong> <span id="detailHot">Không</span>
               </p>
               <div class="movie-actions">
-                <button id="followMovieBtn" class="btn-action">
+                <button
+                  id="followMovieBtn"
+                  class="btn-action"
+                  aria-label="Theo dõi phim"
+                >
                   Theo dõi phim
                 </button>
-                <button id="watchMovieBtn" class="btn-action">Xem phim</button>
+                <button
+                  id="watchMovieBtn"
+                  class="btn-action"
+                  aria-label="Xem phim"
+                >
+                  Xem phim
+                </button>
               </div>
             </div>
           </div>
         </section>
       </div>
     </main>
-    <footer class="footer">
-      <!-- Footer content -->
-    </footer>
+    <footer class="footer"></footer>
     <script type="module" src="../assets/js/header.js"></script>
     <script type="module" src="../assets/js/main.js"></script>
     <script type="module">
       document.addEventListener("DOMContentLoaded", () => {
         const urlParams = new URLSearchParams(window.location.search);
-        const movieId = urlParams.get("id");
-        let movies = JSON.parse(localStorage.getItem("movies")) || [];
-        let movie = movies.find((m) => m.id === parseInt(movieId)) || {};
+        const movieId = parseInt(urlParams.get("id"));
 
-        // Hiển thị thông tin phim
-        document.getElementById("detailPoster").src = movie.poster || "??";
+        if (isNaN(movieId)) {
+          document.querySelector(".movie-detail-section").innerHTML =
+            "<p>ID phim không hợp lệ!</p>";
+          return;
+        }
+
+        let movies = [];
+        try {
+          movies = JSON.parse(localStorage.getItem("movies")) || [];
+          if (!Array.isArray(movies)) movies = [];
+        } catch (e) {
+          console.error("Error parsing movies from localStorage:", e);
+          document.querySelector(".movie-detail-section").innerHTML =
+            "<p>Hệ thống đang gặp lỗi. Vui lòng thử lại sau!</p>";
+          return;
+        }
+
+        const movie = movies.find((m) => m.id === movieId) || {};
+        if (!movie || Object.keys(movie).length === 0) {
+          document.querySelector(".movie-detail-section").innerHTML =
+            "<p>Phim không tồn tại hoặc không được tìm thấy!</p>";
+          return;
+        }
+
+        // Display movie details
+        document.getElementById("detailPoster").src =
+          movie.poster || "../assets/images/placeholder.jpg";
+        document.getElementById("detailPoster").alt = movie.title
+          ? `Poster phim ${movie.title}`
+          : "Poster phim";
         document.getElementById("detailTitle").textContent =
-          movie.title || "??";
+          movie.title || "Chưa có tiêu đề";
         document.getElementById("detailEpisodes").textContent =
-          movie.episodes || "??";
+          movie.episodes || "Chưa có thông tin";
         document.getElementById("detailDuration").textContent =
-          movie.duration || "??";
+          movie.duration || "Chưa có thông tin";
         document.getElementById("detailAltTitle").textContent =
-          movie.altTitle || "??";
+          movie.altTitle || "Chưa có thông tin";
         document.getElementById("detailDescription").textContent =
-          movie.description || "??";
+          movie.description || "Chưa có thông tin";
         document.getElementById("detailStatus").textContent =
-          movie.status || "??";
+          movie.status || "Chưa có thông tin";
         document.getElementById("detailFormat").textContent =
-          movie.format || "??";
+          movie.format || "Chưa có thông tin";
         document.getElementById("detailSubtitles").textContent =
-          movie.subtitles || "??";
+          movie.subtitles || "Chưa có thông tin";
         document.getElementById("detailCategory").textContent =
-          movie.category || "??";
-        document.getElementById("detailType").textContent = movie.type || "??";
+          movie.category || "Chưa có thông tin";
+        document.getElementById("detailType").textContent =
+          movie.type || "Chưa có thông tin";
         document.getElementById("detailHot").textContent = movie.hot
           ? "Có"
           : "Không";
 
-        // Xử lý theo dõi phim
-        document
-          .getElementById("followMovieBtn")
-          .addEventListener("click", () => {
-            if (!window.app.currentUser) {
-              alert("Vui lòng đăng nhập để theo dõi phim!");
-              window.app.showLoginModal();
-              return;
-            }
-            window.app.addToFavorites(movieId);
-          });
+        // Disable watch button if no episodes
+        if (
+          !movie.episodeLinks ||
+          Object.keys(movie.episodeLinks).length === 0
+        ) {
+          document.getElementById("watchMovieBtn").disabled = true;
+          document.getElementById("watchMovieBtn").textContent =
+            "Chưa có tập phim";
+        }
 
-        // Xử lý xem phim và tăng số lượt xem
+        // Handle follow/unfollow movie
+        const followBtn = document.getElementById("followMovieBtn");
+        const updateFollowButton = () => {
+          if (!window.app?.currentUser) return;
+          const userId =
+            window.app.currentUser.id || window.app.currentUser.username;
+          let favorites =
+            JSON.parse(localStorage.getItem(`favorites_${userId}`)) || [];
+          if (!Array.isArray(favorites)) favorites = [];
+          const isFavorited = favorites.includes(movieId);
+          followBtn.textContent = isFavorited ? "Bỏ theo dõi" : "Theo dõi phim";
+          followBtn.setAttribute(
+            "aria-label",
+            isFavorited ? "Bỏ theo dõi phim" : "Theo dõi phim"
+          );
+        };
+
+        updateFollowButton();
+
+        followBtn.addEventListener("click", () => {
+          if (!window.app?.currentUser) {
+            alert("Vui lòng đăng nhập để theo dõi phim!");
+            window.app?.showLoginModal?.();
+            return;
+          }
+
+          const userId =
+            window.app.currentUser.id || window.app.currentUser.username;
+          let favorites = [];
+          try {
+            favorites =
+              JSON.parse(localStorage.getItem(`favorites_${userId}`)) || [];
+            if (!Array.isArray(favorites)) favorites = [];
+          } catch (e) {
+            console.error("Error parsing favorites from localStorage:", e);
+            alert("Hệ thống đang gặp lỗi. Vui lòng thử lại sau!");
+            return;
+          }
+
+          const isFavorited = favorites.includes(movieId);
+          if (isFavorited) {
+            favorites = favorites.filter((id) => id !== movieId);
+            alert("Đã xóa phim khỏi danh sách yêu thích!");
+          } else {
+            favorites.push(movieId);
+            alert("Đã thêm phim vào danh sách yêu thích!");
+          }
+
+          localStorage.setItem(
+            `favorites_${userId}`,
+            JSON.stringify(favorites)
+          );
+          updateFollowButton();
+        });
+
+        // Handle watch movie
         document
           .getElementById("watchMovieBtn")
           .addEventListener("click", () => {
@@ -132,14 +234,11 @@
               movie.episodeLinks &&
               Object.keys(movie.episodeLinks).length > 0
             ) {
-              // Tăng số lượt xem
               movie.views = (movie.views || 0) + 1;
-              // Cập nhật mảng movies
               movies = movies.map((m) =>
-                m.id === parseInt(movieId) ? { ...m, views: movie.views } : m
+                m.id === movieId ? { ...m, views: movie.views } : m
               );
               localStorage.setItem("movies", JSON.stringify(movies));
-
               localStorage.setItem("selectedMovie", JSON.stringify(movie));
               window.location.href = "watch-movie.html";
             } else {

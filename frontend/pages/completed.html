@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Website xem phim hoàn thành chất lượng cao - Tu Bàng DB"
+      content="Website xem phim hoàn thành chất lượng cao - Tu Bằng ĐB"
     />
     <title>Phim Hoàn Thành</title>
     <link rel="stylesheet" href="../assets/css/style.css" />
@@ -183,5 +183,83 @@
     <script type="module" src="../assets/js/header.js"></script>
     <script type="module" src="../assets/js/main.js"></script>
     <script type="module" src="../assets/js/auth.js"></script>
+    <script type="module">
+      document.addEventListener("DOMContentLoaded", () => {
+        const movies = JSON.parse(localStorage.getItem("movies")) || [];
+        const completedMovies = movies.filter(
+          (movie) => movie.status === "Hoàn thành"
+        );
+        const movieList = document.getElementById("completedMovies");
+        const loadMoreBtn = document.getElementById("loadMoreCompleted");
+        let displayedMovies = [];
+        const moviesPerLoad = 10;
+
+        // Function to shuffle array (Fisher-Yates algorithm)
+        function shuffleArray(array) {
+          const newArray = [...array];
+          for (let i = newArray.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+          }
+          return newArray;
+        }
+
+        // Function to render movies
+        function renderMovies(moviesToRender) {
+          const html = moviesToRender
+            .map(
+              (movie) => `
+              <div class="movie-card" onclick="window.location.href='movie-detail.html?id=${
+                movie.id
+              }'">
+                <div class="movie-poster">
+                  <img src="${
+                    movie.poster || "https://via.placeholder.com/200x300"
+                  }" alt="${movie.title}">
+                  <div class="movie-rating">
+                    <span class="star-rating">⭐ ${
+                      movie.averageRating || 0
+                    }/5</span>
+                  </div>
+                </div>
+                <div class="movie-info">
+                  <h3 class="movie-title">${movie.title}</h3>
+                  <p class="view-count"><i class="fas fa-eye"></i> ${
+                    movie.views || 0
+                  } lượt xem</p>
+                  <p>Trạng thái: ${movie.status || "Đang cập nhật"}</p>
+                </div>
+              </div>
+            `
+            )
+            .join("");
+          movieList.innerHTML += html;
+        }
+
+        // Function to load more movies
+        function loadMovies() {
+          const remainingMovies = completedMovies.filter(
+            (movie) => !displayedMovies.includes(movie.id)
+          );
+          if (remainingMovies.length === 0) {
+            loadMoreBtn.style.display = "none";
+            return;
+          }
+          const shuffledMovies = shuffleArray(remainingMovies);
+          const moviesToShow = shuffledMovies.slice(0, moviesPerLoad);
+          displayedMovies.push(...moviesToShow.map((movie) => movie.id));
+          renderMovies(moviesToShow);
+          if (displayedMovies.length >= completedMovies.length) {
+            loadMoreBtn.style.display = "none";
+          }
+        }
+
+        // Initial load of 10 random completed movies
+        loadMovies();
+
+        // Load more movies on button click
+        loadMoreBtn.addEventListener("click", loadMovies);
+      });
+    </script>
   </body>
 </html>

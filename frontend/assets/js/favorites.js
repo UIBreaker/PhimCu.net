@@ -1,121 +1,89 @@
-// Sample favorites data (for demo purposes)
-const favoritesData = [
-  {
-    title: "Tiên Nghịch",
-    altTitle: "Xian Ni",
-    poster:
-      "https://static.hh3d.link/wp-content/uploads/2023/09/tien-nghich-3.jpg?format=auto&quality=90",
-    episode: "Tập 91",
-  },
-];
+import { MESSAGES } from "./constants.js";
 
-// Function to create a favorite item
-function createFavoriteItem(item) {
-  const favoriteItem = document.createElement("div");
-  favoriteItem.classList.add("favorite-item", "movie-card");
-  favoriteItem.innerHTML = `
-          <div class="movie-poster">
-            <img src="${item.poster}" alt="${item.title}" />
-          </div>
-          <div class="movie-info">
-            <h3 class="movie-title">${item.title}</h3>
-            <p class="movie-alt-title">${item.altTitle}</p>
-            <div class="movie-meta">
-              <span><i class="fas fa-play"></i> ${item.episode}</span>
-            </div>
-          </div>
-          <button class="remove-btn"><i class="fas fa-times"></i></button>
-        `;
-  favoriteItem.querySelector(".remove-btn").addEventListener("click", () => {
-    removeFavoriteItem(item.title);
-    favoriteItem.remove();
+const favoritesMoviesGrid = document.getElementById("favoritesMovies");
+const loadingSpinner = document.querySelector(".loading");
+
+const renderFavorites = (favorites, movies, userId) => {
+  loadingSpinner.style.display = "none";
+  if (!window.app.currentUser) {
+    favoritesMoviesGrid.innerHTML = `<p>${MESSAGES.LOGIN_REQUIRED}</p>`;
+    window.app.showLoginModal?.();
+    return;
+  }
+  if (!favorites || favorites.length === 0) {
+    favoritesMoviesGrid.innerHTML = `<p>${MESSAGES.NO_FAVORITES}</p>`;
+    return;
+  }
+
+  favoritesMoviesGrid.innerHTML = "";
+  const favoriteMovies = movies.filter((movie) => favorites.includes(movie.id));
+  favoriteMovies.forEach((movie) => {
+    const movieCard = document.createElement("div");
+    movieCard.className = "movie-card";
+    movieCard.innerHTML = `
+      <img src="${
+        movie.poster || "../assets/images/placeholder.jpg"
+      }" alt="Poster phim ${
+      movie.title || "Không có tiêu đề"
+    }" loading="lazy" />
+      <h3>${movie.title || "Chưa có tiêu đề"}</h3>
+      <p>Lượt xem: ${movie.views || 0}</p>
+      <div class="movie-card-actions">
+        <button class="watch-btn" data-id="${movie.id}">Xem phim</button>
+        <button class="remove-favorite" data-id="${movie.id}">Xóa</button>
+      </div>
+    `;
+    favoritesMoviesGrid.appendChild(movieCard);
+
+    movieCard.querySelector(".watch-btn").addEventListener("click", () => {
+      window.location.href = `movie-detail.html?id=${movie.id}`;
+    });
+
+    movieCard
+      .querySelector(".remove-favorite")
+      .addEventListener("click", () => {
+        let updatedFavorites = favorites.filter((id) => id !== movie.id);
+        localStorage.setItem(
+          `favorites_${userId}`,
+          JSON.stringify(updatedFavorites)
+        );
+        renderFavorites(updatedFavorites, movies, userId);
+        alert("Đã xóa phim khỏi danh sách yêu thích!");
+      });
   });
-  return favoriteItem;
-}
+};
 
-// Load favorites from localStorage
-function loadFavorites() {
-  const favoritesList = document.getElementById("favoritesList");
-  favoritesList.innerHTML = "";
-  let favorites =
-    JSON.parse(localStorage.getItem("favorites")) || favoritesData;
-  favorites.forEach((item) => {
-    const favoriteItem = createFavoriteItem(item);
-    favoritesList.appendChild(favoriteItem);
-  });
-}
+document.addEventListener("DOMContentLoaded", () => {
+  loadingSpinner.style.display = "block";
 
-// Remove a single favorite item
-function removeFavoriteItem(title) {
-  let favorites =
-    JSON.parse(localStorage.getItem("favorites")) || favoritesData;
-  favorites = favorites.filter((item) => item.title !== title);
-  localStorage.setItem("favorites", JSON.stringify(favorites));
-}
+  if (!window.app) {
+    console.error("App not available!");
+    loadingSpinner.style.display = "none";
+    favoritesMoviesGrid.innerHTML = `<p>${MESSAGES.SYSTEM_ERROR}</p>`;
+    return;
+  }
 
-// Search functionality
-document.getElementById("searchBtn").addEventListener("click", () => {
-  const query = document.getElementById("searchInput").value.toLowerCase();
-  let favorites =
-    JSON.parse(localStorage.getItem("favorites")) || favoritesData;
-  const filteredFavorites = favorites.filter((item) =>
-    item.title.toLowerCase().includes(query)
-  );
-  const favoritesList = document.getElementById("favoritesList");
-  favoritesList.innerHTML = "";
-  filteredFavorites.forEach((item) => {
-    const favoriteItem = createFavoriteItem(item);
-    favoritesList.appendChild(favoriteItem);
-  });
+  if (!window.app.currentUser) {
+    loadingSpinner.style.display = "none";
+    renderFavorites([], [], null);
+    return;
+  }
+
+  const userId = window.app.currentUser.id || window.app.currentUser.username;
+  let favorites = [];
+  let movies = [];
+  try {
+    favorites = JSON.parse(localStorage.getItem(`favorites_${userId}`)) || [];
+    movies = JSON.parse(localStorage.getItem("movies")) || [];
+    if (!Array.isArray(favorites) || !Array.isArray(movies)) {
+      throw new Error("Invalid data format");
+    }
+  } catch (e) {
+    console.error("Error parsing data from localStorage:", e);
+    loadingSpinner.style.display = "none";
+    favoritesMoviesGrid.innerHTML = `<p>${MESSAGES.SYSTEM_ERROR}</p>`;
+    return;
+  }
+
+  renderFavorites(favorites, movies, userId);
 });
-
-// Navigation to other pages
-document.getElementById("historyBtn").addEventListener("click", () => {
-  window.location.href = "history.html";
-});
-
-document.getElementById("favoriteBtn").addEventListener("click", () => {
-  window.location.href = "favorites.html";
-});
-
-// Modal handling (same as index.html)
-const loginModal = document.getElementById("loginModal");
-const registerModal = document.getElementById("registerModal");
-const loginBtn = document.getElementById("loginBtn");
-const registerBtn = document.getElementById("registerBtn");
-const switchToRegister = document.getElementById("switchToRegister");
-const switchToLogin = document.getElementById("switchToLogin");
-const closes = document.querySelectorAll(".close");
-
-loginBtn.addEventListener("click", () => {
-  loginModal.style.display = "block";
-});
-
-registerBtn.addEventListener("click", () => {
-  registerModal.style.display = "block";
-});
-
-switchToRegister.addEventListener("click", () => {
-  loginModal.style.display = "none";
-  registerModal.style.display = "block";
-});
-
-switchToLogin.addEventListener("click", () => {
-  registerModal.style.display = "none";
-  loginModal.style.display = "block";
-});
-
-closes.forEach((close) => {
-  close.addEventListener("click", () => {
-    loginModal.style.display = "none";
-    registerModal.style.display = "none";
-  });
-});
-
-window.addEventListener("click", (e) => {
-  if (e.target === loginModal) loginModal.style.display = "none";
-  if (e.target === registerModal) registerModal.style.display = "none";
-});
-
-// Initial load
-loadFavorites();

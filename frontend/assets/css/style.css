@@ -1635,3 +1635,81 @@ body {
   background-color: #0056b3;
 }
 /* ////////////////////////////////////////////////// */
+.movies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  padding: 20px 0;
+}
+
+.movie-card {
+  background: #16213e;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.movie-card:hover {
+  transform: scale(1.05);
+}
+
+.movie-card img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+}
+
+.movie-card h3 {
+  margin: 10px;
+  font-size: 1.2em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #fff;
+}
+
+.movie-card p {
+  margin: 0 10px 10px;
+  font-size: 0.9em;
+  color: #ccc;
+}
+
+.movie-card-actions {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+}
+
+.watch-btn,
+.remove-favorite {
+  flex: 1;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+  color: #fff;
+}
+
+.watch-btn {
+  background: #4ecdc4;
+}
+
+.watch-btn:hover {
+  background: #3ab8af;
+}
+
+.remove-favorite {
+  background: #ff6b6b;
+}
+
+.remove-favorite:hover {
+  background: #e55a5a;
+}
+
+.loading {
+  text-align: center;
+  font-size: 1.2em;
+  color: #ccc;
+}

@@ -3,6 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Xem danh sách phim yêu thích của bạn trên HaoHinh3D - website xem phim tu tiên chất lượng cao."
+    />
+    <meta
+      name="keywords"
+      content="phim yêu thích, phim tu tiên, HaoHinh3D, phim huyền huyền, kiếm hiệp"
+    />
+    <meta name="robots" content="index, follow" />
     <title>Yêu Thích - HaoHinh3D</title>
     <link rel="stylesheet" href="../assets/css/style.css" />
     <link
@@ -16,16 +25,17 @@
       <div class="container">
         <ul class="nav-menu">
           <li><a href="./index.html">Trang chủ</a></li>
-          <li class="dropdown">
-            <a href="#">Thể loại <i class="fas fa-chevron-down"></i></a>
-            <ul class="dropdown-menu">
+          <li class="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a href="./category.html" aria-label="Danh mục thể loại">
+              Thể loại <i class="fas fa-chevron-down"></i>
+            </a>
+            <ul class="dropdown-menu" aria-label="Danh sách thể loại">
               <li><a href="#">Tu tiên</a></li>
               <li><a href="#">Huyền huyền</a></li>
               <li><a href="#">Kiếm hiệp</a></li>
               <li><a href="#">Cổ trang</a></li>
             </ul>
           </li>
-          <li><a href="./category.html">Thể loại</a></li>
           <li><a href="./now-showing.html">Đang chiếu</a></li>
           <li><a href="./schedule.html">Lịch chiếu</a></li>
           <li><a href="./completed.html">Hoàn thành</a></li>
@@ -37,11 +47,12 @@
       <div class="container">
         <section class="movies-section">
           <h2 class="section-title">Phim Yêu Thích</h2>
-          <div class="movies-grid" id="favoritesMovies"></div>
+          <div class="movies-grid" id="favoritesMovies">
+            <div class="loading" style="display: none">Đang tải...</div>
+          </div>
         </section>
       </div>
     </main>
-    <!-- Footer -->
     <footer class="footer">
       <div class="container">
         <div class="footer-content">
@@ -49,9 +60,24 @@
             <h3>HaoHinh3D</h3>
             <p>Website xem phim tu tiên chất lượng cao</p>
             <div class="social-links">
-              <a href="#"><i class="fab fa-facebook"></i></a>
-              <a href="#"><i class="fab fa-youtube"></i></a>
-              <a href="#"><i class="fab fa-telegram"></i></a>
+              <a
+                href="https://facebook.com/haohinh3d"
+                aria-label="Theo dõi trên Facebook"
+                title="Facebook"
+                ><i class="fab fa-facebook"></i
+              ></a>
+              <a
+                href="https://youtube.com/haohinh3d"
+                aria-label="Theo dõi trên YouTube"
+                title="YouTube"
+                ><i class="fab fa-youtube"></i
+              ></a>
+              <a
+                href="https://t.me/haohinh3d"
+                aria-label="Theo dõi trên Telegram"
+                title="Telegram"
+                ><i class="fab fa-telegram"></i
+              ></a>
             </div>
           </div>
           <div class="footer-section">
@@ -75,10 +101,10 @@
           <div class="footer-section">
             <h4>Liên hệ</h4>
             <ul>
-              <li><a href="#">Về chúng tôi</a></li>
-              <li><a href="#">Liên hệ</a></li>
-              <li><a href="#">Điều khoản</a></li>
-              <li><a href="#">Bảo mật</a></li>
+              <li><a href="./about.html">Về chúng tôi</a></li>
+              <li><a href="./contact.html">Liên hệ</a></li>
+              <li><a href="./terms.html">Điều khoản</a></li>
+              <li><a href="./privacy.html">Bảo mật</a></li>
             </ul>
           </div>
         </div>
@@ -87,22 +113,15 @@
         </div>
       </div>
     </footer>
-
     <div class="modal" id="loginModal">
-      <!-- Giữ nguyên modal từ top-rated.html -->
+      <p>Đang tải biểu mẫu đăng nhập...</p>
     </div>
     <div class="modal" id="registerModal">
-      <!-- Giữ nguyên modal từ top-rated.html -->
+      <p>Đang tải biểu mẫu đăng ký...</p>
     </div>
     <script type="module" src="../assets/js/header.js"></script>
     <script type="module" src="../assets/js/main.js"></script>
     <script type="module" src="../assets/js/auth.js"></script>
-    <script type="module">
-      document.addEventListener("DOMContentLoaded", () => {
-        if (window.app) {
-          window.app.loadFavoritesMovies();
-        }
-      });
-    </script>
+    <script type="module" src="../assets/js/favorites.js"></script>
   </body>
 </html>
