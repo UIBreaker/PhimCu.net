@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thông Tin Cá Nhân - HaoHinh3D</title>
+    <link rel="stylesheet" href="../../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/profile.css" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <header id="header"></header>
+
+    <main class="main-content">
+      <div class="container">
+        <h2 class="section-title">Thông Tin Cá Nhân</h2>
+        <div class="profile-container">
+          <div class="profile-avatar">
+            <img
+              src="https://via.placeholder.com/150"
+              alt="Avatar"
+              id="userAvatar"
+            />
+            <button id="changeAvatarBtn">Thay Đổi Avatar</button>
+          </div>
+          <div class="profile-info">
+            <div class="info-item">
+              <label>Biệt danh:</label>
+              <input type="text" id="nickname" value="" readonly />
+              <button id="editNicknameBtn">Thay Đổi</button>
+            </div>
+            <div class="info-item">
+              <label>Tuổi:</label>
+              <input type="text" id="age" value="" readonly />
+              <button id="editAgeBtn">Thay Đổi</button>
+            </div>
+            <div class="info-item">
+              <label>Hẻ thông tuyến:</label>
+              <input type="text" id="location" value="" readonly />
+              <button id="editLocationBtn">Thay Đổi</button>
+            </div>
+            <div class="info-item">
+              <label>Châm ngôn:</label>
+              <input type="text" id="motto" value="" readonly />
+              <button id="editMottoBtn">Thay Đổi</button>
+            </div>
+            <div class="info-item">
+              <label>Ngày sinh:</label>
+              <input type="text" id="birthdate" value="" readonly />
+              <button id="editBirthdateBtn">Thay Đổi</button>
+            </div>
+            <div class="info-item">
+              <label>ID:</label>
+              <input type="text" id="userId" value="" readonly />
+            </div>
+            <div class="info-item">
+              <label>Tên tài khoản:</label>
+              <input type="text" id="username" value="" readonly />
+              <button id="editUsernameBtn">Thay Đổi</button>
+            </div>
+            <div class="info-item">
+              <label>Email:</label>
+              <input type="email" id="email" value="" readonly />
+              <button id="editEmailBtn">Thay Đổi</button>
+            </div>
+            <div class="info-item">
+              <label>Ngày đăng ký:</label>
+              <input
+                type="text"
+                id="registerDate"
+                value="04-06-2025"
+                readonly
+              />
+              <button
+                class="save-btn"
+                id="saveChangesBtn"
+                style="display: none"
+              >
+                Cập nhật
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script type="module" src="../assets/js/header.js"></script>
+    <script type="module" src="../assets/js/main.js"></script>
+    <script>
+      // Check if user is logged in
+      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+      if (!currentUser) {
+        window.location.href = "index.html";
+      }
+
+      // Sample profile data (replace with actual data from localStorage or backend)
+      const profileData = {
+        nickname: "Nguyễn Vũ Nhất Nam",
+        age: "0/21",
+        location: "Phạm Nhật Nam",
+        motto: "",
+        birthdate: "mm/dd/yyyy",
+        userId: "13528",
+        username: "nguyenmunhatnam",
+        email: "nhatnam17127@gmail.com",
+        registerDate: "04-06-2025",
+      };
+
+      // Populate fields
+      document.getElementById("nickname").value = profileData.nickname;
+      document.getElementById("age").value = profileData.age;
+      document.getElementById("location").value = profileData.location;
+      document.getElementById("motto").value = profileData.motto;
+      document.getElementById("birthdate").value = profileData.birthdate;
+      document.getElementById("userId").value = profileData.userId;
+      document.getElementById("username").value = profileData.username;
+      document.getElementById("email").value = profileData.email;
+      document.getElementById("registerDate").value = profileData.registerDate;
+
+      // Toggle edit mode
+      const inputs = document.querySelectorAll(".profile-info input[readonly]");
+      const editButtons = document.querySelectorAll(
+        ".profile-info button[id$='Btn']"
+      );
+      const saveChangesBtn = document.getElementById("saveChangesBtn");
+
+      editButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const field = button.id
+            .replace("edit", "")
+            .replace("Btn", "")
+            .toLowerCase();
+          const input = document.getElementById(field);
+          if (input) {
+            input.readOnly = !input.readOnly;
+            if (!input.readOnly) {
+              input.focus();
+              saveChangesBtn.style.display = "inline-block";
+            }
+          }
+        });
+      });
+
+      // Save changes
+      saveChangesBtn.addEventListener("click", () => {
+        inputs.forEach((input) => {
+          if (!input.readOnly) {
+            input.readOnly = true;
+          }
+        });
+        saveChangesBtn.style.display = "none";
+        alert("Cập nhật thông tin thành công!");
+      });
+
+      // Change avatar (placeholder)
+      document
+        .getElementById("changeAvatarBtn")
+        .addEventListener("click", () => {
+          alert("Chức năng thay đổi avatar đang được phát triển!");
+        });
+    </script>
+  </body>
+</html>

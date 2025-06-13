@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Xem Phim - Tu Bằng ĐB</title>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/watch-movie.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <header id="header"></header>
+    <nav class="navbar">
+      <div class="container">
+        <ul class="nav-menu">
+          <li><a href="index.html">Trang chủ</a></li>
+          <li><a href="category.html">Thể loại</a></li>
+          <li><a href="now-showing.html">Đang chiếu</a></li>
+          <li><a href="schedule.html">Lịch chiếu</a></li>
+          <li><a href="completed.html">Hoàn thành</a></li>
+          <li><a href="top-rated.html">Đánh giá cao</a></li>
+        </ul>
+      </div>
+    </nav>
+    <main class="main-content">
+      <div class="container">
+        <section class="watch-movie-section">
+          <h2 class="watch-title" id="watchTitle"></h2>
+          <p class="current-episode" id="currentEpisode"></p>
+          <div class="video-player">
+            <iframe
+              id="videoPlayer"
+              src=""
+              frameborder="0"
+              allowfullscreen
+            ></iframe>
+          </div>
+          <!-- Đánh giá sao -->
+          <div class="rating-section">
+            <h3>Đánh giá phim</h3>
+            <div class="star-rating-input">
+              <span>Chọn số sao: </span>
+              <i class="fas fa-star" data-value="1"></i>
+              <i class="fas fa-star" data-value="2"></i>
+              <i class="fas fa-star" data-value="3"></i>
+              <i class="fas fa-star" data-value="4"></i>
+              <i class="fas fa-star" data-value="5"></i>
+              <button id="submitRatingBtn">Gửi đánh giá</button>
+              <button id="deleteRatingBtn" style="display: none">
+                Xóa đánh giá
+              </button>
+            </div>
+            <p id="averageRating">Đánh giá trung bình: 0/5 (0 lượt đánh giá)</p>
+          </div>
+          <h3 class="episode-list-title">Danh sách tập</h3>
+          <div class="episode-grid" id="episodeGrid"></div>
+          <!-- Bình luận -->
+          <div class="comment-section">
+            <h3>Bình luận</h3>
+            <div class="comment-input">
+              <textarea
+                id="commentInput"
+                placeholder="Viết bình luận..."
+                required
+              ></textarea>
+              <button id="submitCommentBtn">Gửi bình luận</button>
+            </div>
+            <div id="commentList"></div>
+          </div>
+        </section>
+      </div>
+    </main>
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3>HaoHinh3D</h3>
+            <p>Website xem phim tu tiên chất lượng cao</p>
+            <div class="social-links">
+              <a href="#"><i class="fab fa-facebook"></i></a>
+              <a href="#"><i class="fab fa-youtube"></i></a>
+              <a href="#"><i class="fab fa-telegram"></i></a>
+            </div>
+          </div>
+          <div class="footer-section">
+            <h4>Phim hot</h4>
+            <ul>
+              <li><a href="#">Tu Tiên Nghịch</a></li>
+              <li><a href="#">Đấu La Đại Lục</a></li>
+              <li><a href="#">Hoàn Mỹ Thế Giới</a></li>
+              <li><a href="#">Tiên Nghịch</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h4>Thể loại</h4>
+            <ul>
+              <li><a href="#">Tu tiên</a></li>
+              <li><a href="#">Huyền huyền</a></li>
+              <li><a href="#">Kiếm hiệp</a></li>
+              <li><a href="#">Cổ trang</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h4>Liên hệ</h4>
+            <ul>
+              <li><a href="#">Về chúng tôi</a></li>
+              <li><a href="#">Liên hệ</a></li>
+              <li><a href="#">Điều khoản</a></li>
+              <li><a href="#">Bảo mật</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>© 2025 HaoHinh3D. Tất cả quyền được bảo lưu.</p>
+        </div>
+      </div>
+    </footer>
+    <script type="module" src="../assets/js/header.js"></script>
+    <script type="module" src="../assets/js/main.js"></script>
+    <script type="module">
+      document.addEventListener("DOMContentLoaded", () => {
+        const movie = JSON.parse(localStorage.getItem("selectedMovie")) || {};
+        const videoPlayer = document.getElementById("videoPlayer");
+        const watchTitle = document.getElementById("watchTitle");
+        const currentEpisode = document.getElementById("currentEpisode");
+        const episodeGrid = document.getElementById("episodeGrid");
+        const submitRatingBtn = document.getElementById("submitRatingBtn");
+        const deleteRatingBtn = document.getElementById("deleteRatingBtn");
+        const averageRatingDisplay = document.getElementById("averageRating");
+        const commentInput = document.getElementById("commentInput");
+        const submitCommentBtn = document.getElementById("submitCommentBtn");
+        const commentList = document.getElementById("commentList");
+
+        watchTitle.textContent = movie.title || "??";
+        currentEpisode.textContent = `Đang xem: Tập 1` || "??";
+
+        // Tải dữ liệu đánh giá và bình luận
+        let ratings =
+          JSON.parse(localStorage.getItem(`ratings_${movie.id}`)) || {};
+        let comments =
+          JSON.parse(localStorage.getItem(`comments_${movie.id}`)) || [];
+        let currentUser =
+          JSON.parse(localStorage.getItem("currentUser")) || null;
+
+        // Hàm cập nhật đánh giá trung bình
+        const updateAverageRating = () => {
+          const ratingValues = Object.values(ratings);
+          const totalRatings = ratingValues.length;
+          const averageRating =
+            totalRatings > 0
+              ? (
+                  ratingValues.reduce((sum, rating) => sum + rating, 0) /
+                  totalRatings
+                ).toFixed(1)
+              : 0;
+          averageRatingDisplay.textContent = `Đánh giá trung bình: ${averageRating}/5 (${totalRatings} lượt đánh giá)`;
+
+          // Cập nhật averageRating vào movie trong localStorage
+          const movies = JSON.parse(localStorage.getItem("movies")) || [];
+          const updatedMovies = movies.map((m) =>
+            m.id === movie.id
+              ? { ...m, averageRating: parseFloat(averageRating) }
+              : m
+          );
+          localStorage.setItem("movies", JSON.stringify(updatedMovies));
+        };
+
+        // Hàm cập nhật trạng thái sao của người dùng
+        const updateUserRating = () => {
+          if (currentUser && ratings[currentUser.username]) {
+            const userRating = ratings[currentUser.username];
+            document
+              .querySelectorAll(".star-rating-input i")
+              .forEach((star) => {
+                star.classList.toggle(
+                  "active",
+                  parseInt(star.dataset.value) <= userRating
+                );
+              });
+            deleteRatingBtn.style.display = "block";
+          } else {
+            document
+              .querySelectorAll(".star-rating-input i")
+              .forEach((star) => {
+                star.classList.remove("active");
+              });
+            deleteRatingBtn.style.display = "none";
+          }
+        };
+
+        // Xử lý chọn sao
+        let selectedRating = 0;
+        document.querySelectorAll(".star-rating-input i").forEach((star) => {
+          star.addEventListener("click", () => {
+            if (!currentUser) {
+              alert("Vui lòng đăng nhập để đánh giá!");
+              window.app.showLoginModal();
+              return;
+            }
+            selectedRating = parseInt(star.dataset.value);
+            document.querySelectorAll(".star-rating-input i").forEach((s) => {
+              s.classList.toggle(
+                "active",
+                parseInt(s.dataset.value) <= selectedRating
+              );
+            });
+          });
+        });
+
+        // Gửi đánh giá
+        submitRatingBtn.addEventListener("click", () => {
+          if (!currentUser) {
+            alert("Vui lòng đăng nhập để đánh giá!");
+            window.app.showLoginModal();
+            return;
+          }
+          if (selectedRating < 1 || selectedRating > 5) {
+            alert("Vui lòng chọn số sao từ 1 đến 5!");
+            return;
+          }
+          ratings[currentUser.username] = selectedRating;
+          localStorage.setItem(`ratings_${movie.id}`, JSON.stringify(ratings));
+          updateAverageRating();
+          updateUserRating();
+          selectedRating = 0; // Reset sau khi gửi
+        });
+
+        // Xóa đánh giá
+        deleteRatingBtn.addEventListener("click", () => {
+          if (currentUser && ratings[currentUser.username]) {
+            delete ratings[currentUser.username];
+            localStorage.setItem(
+              `ratings_${movie.id}`,
+              JSON.stringify(ratings)
+            );
+            updateAverageRating();
+            updateUserRating();
+            selectedRating = 0;
+          }
+        });
+
+        // Hàm hiển thị bình luận
+        const renderComments = () => {
+          commentList.innerHTML = comments
+            .map(
+              (comment) => `
+              <div class="comment">
+                <strong>${comment.username}</strong>: ${comment.text}
+                ${
+                  currentUser && comment.username === currentUser.username
+                    ? `<button class="delete-comment-btn" data-id="${comment.id}">Xóa</button>`
+                    : ""
+                }
+              </div>
+            `
+            )
+            .join("");
+          // Thêm sự kiện xóa bình luận
+          document.querySelectorAll(".delete-comment-btn").forEach((btn) => {
+            btn.addEventListener("click", () => {
+              const commentId = parseInt(btn.dataset.id);
+              comments = comments.filter((c) => c.id !== commentId);
+              localStorage.setItem(
+                `comments_${movie.id}`,
+                JSON.stringify(comments)
+              );
+              renderComments();
+            });
+          });
+        };
+
+        // Gửi bình luận
+        submitCommentBtn.addEventListener("click", () => {
+          if (!currentUser) {
+            alert("Vui lòng đăng nhập để bình luận!");
+            window.app.showLoginModal();
+            return;
+          }
+          const commentText = commentInput.value.trim();
+          if (!commentText) {
+            alert("Vui lòng nhập nội dung bình luận!");
+            return;
+          }
+          comments.push({
+            id: Date.now(),
+            username: currentUser.username,
+            text: commentText,
+          });
+          localStorage.setItem(
+            `comments_${movie.id}`,
+            JSON.stringify(comments)
+          );
+          commentInput.value = "";
+          renderComments();
+        });
+
+        // Tải danh sách tập
+        if (movie.episodeLinks) {
+          const episodes = Object.keys(movie.episodeLinks).sort(
+            (a, b) => a - b
+          );
+          episodeGrid.innerHTML = episodes
+            .map(
+              (episode) => `
+              <button class="episode-btn" data-episode="${episode}">Tập ${episode}</button>
+            `
+            )
+            .join("");
+
+          document.querySelectorAll(".episode-btn").forEach((button) => {
+            button.addEventListener("click", () => {
+              const episode = button.dataset.episode;
+              videoPlayer.src = movie.episodeLinks[episode];
+              currentEpisode.textContent = `Đang xem: Tập ${episode}`;
+            });
+          });
+
+          if (episodes.length > 0) {
+            videoPlayer.src = movie.episodeLinks[episodes[0]];
+            currentEpisode.textContent = `Đang xem: Tập ${episodes[0]}`;
+          }
+        } else {
+          episodeGrid.innerHTML = "<p>Không có tập nào để xem.</p>";
+        }
+
+        // Khởi tạo giao diện
+        updateAverageRating();
+        updateUserRating();
+        renderComments();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Website xem phim hoàn thành chất lượng cao - Tu Bàng DB"
+    />
+    <title>Phim Hoàn Thành</title>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- Header -->
+    <header id="header"></header>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="container">
+        <ul class="nav-menu">
+          <li><a href="./index.html">Trang chủ</a></li>
+          <li class="dropdown">
+            <a href="#">Thể loại <i class="fas fa-chevron-down"></i></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">Tu tiên</a></li>
+              <li><a href="#">Huyền huyền</a></li>
+              <li><a href="#">Kiếm hiệp</a></li>
+              <li><a href="#">Cổ trang</a></li>
+            </ul>
+          </li>
+          <li><a href="./category.html">Thể loại</a></li>
+          <li><a href="./now-showing.html">Đang chiếu</a></li>
+          <li><a href="./schedule.html">Lịch chiếu</a></li>
+          <li><a href="./completed.html" class="active">Hoàn thành</a></li>
+          <li><a href="./top-rated.html">Đánh giá cao</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="container">
+        <section class="movies-section">
+          <h2 class="section-title">Phim Hoàn Thành</h2>
+          <div class="movies-grid" id="completedMovies">
+            <!-- Completed movies will be loaded here by JavaScript -->
+          </div>
+          <div class="load-more">
+            <button class="btn-load-more" id="loadMoreCompleted">
+              Xem thêm
+            </button>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3>HaoHinh3D</h3>
+            <p>Website xem phim tu tiên chất lượng cao</p>
+            <div class="social-links">
+              <a href="#"><i class="fab fa-facebook"></i></a>
+              <a href="#"><i class="fab fa-youtube"></i></a>
+              <a href="#"><i class="fab fa-telegram"></i></a>
+            </div>
+          </div>
+          <div class="footer-section">
+            <h4>Phim hot</h4>
+            <ul>
+              <li><a href="#">Tu Tiên Nghịch</a></li>
+              <li><a href="#">Đấu La Đại Lục</a></li>
+              <li><a href="#">Hoàn Mỹ Thế Giới</a></li>
+              <li><a href="#">Tiên Nghịch</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h4>Thể loại</h4>
+            <ul>
+              <li><a href="#">Tu tiên</a></li>
+              <li><a href="#">Huyền huyền</a></li>
+              <li><a href="#">Kiếm hiệp</a></li>
+              <li><a href="#">Cổ trang</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h4>Liên hệ</h4>
+            <ul>
+              <li><a href="#">Về chúng tôi</a></li>
+              <li><a href="#">Liên hệ</a></li>
+              <li><a href="#">Điều khoản</a></li>
+              <li><a href="#">Bảo mật</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>© 2025 HaoHinh3D. Tất cả quyền được bảo lưu.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+      <div class="modal-content">
+        <span class="close">×</span>
+        <h2>Đăng nhập</h2>
+        <form id="loginForm">
+          <div class="form-group">
+            <input
+              type="text"
+              id="loginUsername"
+              placeholder="Tên đăng nhập"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <input
+              type="password"
+              id="loginPassword"
+              placeholder="Mật khẩu"
+              required
+            />
+          </div>
+          <button type="submit" class="btn-submit">Đăng nhập</button>
+        </form>
+        <p>
+          Chưa có tài khoản? <a href="#" id="switchToRegister">Đăng ký ngay</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal" id="registerModal">
+      <div class="modal-content">
+        <span class="close">×</span>
+        <h2>Đăng ký</h2>
+        <form id="registerForm">
+          <div class="form-group">
+            <input
+              type="text"
+              id="registerUsername"
+              placeholder="Tên đăng nhập"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <input
+              type="email"
+              id="registerEmail"
+              placeholder="Email"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <input
+              type="password"
+              id="registerPassword"
+              placeholder="Mật khẩu"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <input
+              type="password"
+              id="confirmPassword"
+              placeholder="Xác nhận mật khẩu"
+              required
+            />
+          </div>
+          <button type="submit" class="btn-submit">Đăng ký</button>
+        </form>
+        <p>Đã có tài khoản? <a href="#" id="switchToLogin">Đăng nhập</a></p>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="../assets/js/header.js"></script>
+    <script type="module" src="../assets/js/main.js"></script>
+    <script type="module" src="../assets/js/auth.js"></script>
+  </body>
+</html>

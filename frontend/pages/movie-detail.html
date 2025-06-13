@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chi Tiết Phim - Tu Bằng ĐB</title>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/movie-detail.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <header id="header"></header>
+    <nav class="navbar">
+      <div class="container">
+        <ul class="nav-menu">
+          <li><a href="index.html">Trang chủ</a></li>
+          <li><a href="category.html">Thể loại</a></li>
+          <li><a href="now-showing.html">Đang chiếu</a></li>
+          <li><a href="schedule.html">Lịch chiếu</a></li>
+          <li><a href="completed.html">Hoàn thành</a></li>
+          <li><a href="top-rated.html">Đánh giá cao</a></li>
+        </ul>
+      </div>
+    </nav>
+    <main class="main-content">
+      <div class="container">
+        <section class="movie-detail-section">
+          <h2 class="section-title">Chi Tiết Phim</h2>
+          <div class="movie-detail-content">
+            <img src="" alt="Poster" id="detailPoster" class="movie-poster" />
+            <div class="movie-info">
+              <h3 id="detailTitle"></h3>
+              <p>
+                <strong>Trạng thái:</strong> <span id="detailStatus">??</span>
+              </p>
+              <p>
+                <strong>Số tập:</strong> <span id="detailEpisodes">??</span>
+              </p>
+              <p>
+                <strong>Thời lượng:</strong> <span id="detailDuration">??</span>
+              </p>
+              <p>
+                <strong>Tên tiếng Anh:</strong>
+                <span id="detailAltTitle">??</span>
+              </p>
+              <p>
+                <strong>Mô tả:</strong> <span id="detailDescription">??</span>
+              </p>
+              <p>
+                <strong>Định dạng:</strong> <span id="detailFormat">??</span>
+              </p>
+              <p>
+                <strong>Phụ đề:</strong> <span id="detailSubtitles">??</span>
+              </p>
+              <p>
+                <strong>Doanh mục:</strong> <span id="detailCategory">??</span>
+              </p>
+              <p>
+                <strong>Thuộc phim:</strong> <span id="detailType">??</span>
+              </p>
+              <p>
+                <strong>Phim có hot:</strong> <span id="detailHot">??</span>
+              </p>
+              <div class="movie-actions">
+                <button id="followMovieBtn" class="btn-action">
+                  Theo dõi phim
+                </button>
+                <button id="watchMovieBtn" class="btn-action">Xem phim</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+    <footer class="footer">
+      <!-- Footer content -->
+    </footer>
+    <script type="module" src="../assets/js/header.js"></script>
+    <script type="module" src="../assets/js/main.js"></script>
+    <script type="module">
+      document.addEventListener("DOMContentLoaded", () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const movieId = urlParams.get("id");
+        let movies = JSON.parse(localStorage.getItem("movies")) || [];
+        let movie = movies.find((m) => m.id === parseInt(movieId)) || {};
+
+        // Hiển thị thông tin phim
+        document.getElementById("detailPoster").src = movie.poster || "??";
+        document.getElementById("detailTitle").textContent =
+          movie.title || "??";
+        document.getElementById("detailEpisodes").textContent =
+          movie.episodes || "??";
+        document.getElementById("detailDuration").textContent =
+          movie.duration || "??";
+        document.getElementById("detailAltTitle").textContent =
+          movie.altTitle || "??";
+        document.getElementById("detailDescription").textContent =
+          movie.description || "??";
+        document.getElementById("detailStatus").textContent =
+          movie.status || "??";
+        document.getElementById("detailFormat").textContent =
+          movie.format || "??";
+        document.getElementById("detailSubtitles").textContent =
+          movie.subtitles || "??";
+        document.getElementById("detailCategory").textContent =
+          movie.category || "??";
+        document.getElementById("detailType").textContent = movie.type || "??";
+        document.getElementById("detailHot").textContent = movie.hot
+          ? "Có"
+          : "Không";
+
+        // Xử lý theo dõi phim
+        document
+          .getElementById("followMovieBtn")
+          .addEventListener("click", () => {
+            if (!window.app.currentUser) {
+              alert("Vui lòng đăng nhập để theo dõi phim!");
+              window.app.showLoginModal();
+              return;
+            }
+            window.app.addToFavorites(movieId);
+          });
+
+        // Xử lý xem phim và tăng số lượt xem
+        document
+          .getElementById("watchMovieBtn")
+          .addEventListener("click", () => {
+            if (
+              movie.episodeLinks &&
+              Object.keys(movie.episodeLinks).length > 0
+            ) {
+              // Tăng số lượt xem
+              movie.views = (movie.views || 0) + 1;
+              // Cập nhật mảng movies
+              movies = movies.map((m) =>
+                m.id === parseInt(movieId) ? { ...m, views: movie.views } : m
+              );
+              localStorage.setItem("movies", JSON.stringify(movies));
+
+              localStorage.setItem("selectedMovie", JSON.stringify(movie));
+              window.location.href = "watch-movie.html";
+            } else {
+              alert("Phim chưa có tập nào để xem!");
+            }
+          });
+      });
+    </script>
+  </body>
+</html>

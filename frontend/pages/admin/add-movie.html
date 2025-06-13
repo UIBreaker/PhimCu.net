@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thêm Phim - Tu Bằng ĐB</title>
+  <!-- <link rel="stylesheet" href="../../assets/css/style.css" /> -->
+  <link rel="stylesheet" href="../../assets/css/add-movie.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <a href="../index.html"><h1 style="font-size: 35px">PhimCU.net</h1></a>
+        </div>
+        <div class="header-actions">
+          <a href="dashboard.html">Dashboard</a>
+          <a href="add-movie.html" class="active">Thêm Phim</a>
+          <a href="manage-users.html">Quản Lý Người Dùng</a>
+          <a href="manage-movies.html">Quản Lý Phim</a>
+          <a href="../index.html">Quay Lại</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <div class="container">
+        <form id="addMovieForm" class="form">
+          <h2 class="section-title">Thêm Phim</h2>
+          <div class="form-group">
+            <label for="title">Tên Phim</label>
+            <div class="input-wrapper">
+              <input class="input" type="text" id="title" required />
+              <!-- <span>Tên Phim</span> -->
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="posterUrl">URL Poster</label>
+            <div class="input-wrapper">
+              <input class="input" type="text" id="posterUrl" required />
+              <!-- <span>URL Poster</span> -->
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="description">Mô Tả</label>
+            <div class="input-wrapper">
+              <textarea class="input" id="description" required></textarea>
+              <!-- <span>Mô Tả</span> -->
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Thể Loại</label>
+            <div class="checkbox-group">
+              <label><input type="checkbox" name="category" value="Hành Động"> Hành Động</label>
+              <label><input type="checkbox" name="category" value="Cổ Trang"> Cổ Trang</label>
+              <label><input type="checkbox" name="category" value="Chiến Tranh"> Chiến Tranh</label>
+              <label><input type="checkbox" name="category" value="Viễn Tưởng"> Viễn Tưởng</label>
+              <label><input type="checkbox" name="category" value="Kinh Dị"> Kinh Dị</label>
+              <label><input type="checkbox" name="category" value="Tài Liệu"> Tài Liệu</label>
+              <label><input type="checkbox" name="category" value="Bí ẩn"> Bí ẩn</label>
+              <label><input type="checkbox" name="category" value="Phim 18+"> Phim 18+</label>
+              <label><input type="checkbox" name="category" value="Tình Cảm"> Tình Cảm</label>
+              <label><input type="checkbox" name="category" value="Tâm Lý"> Tâm Lý</label>
+              <label><input type="checkbox" name="category" value="Thể Thao"> Thể Thao</label>
+              <label><input type="checkbox" name="category" value="Phiêu Lưu"> Phiêu Lưu</label>
+              <label><input type="checkbox" name="category" value="Âm Nhạc"> Âm Nhạc</label>
+              <label><input type="checkbox" name="category" value="Gia Đình"> Gia Đình</label>
+              <label><input type="checkbox" name="category" value="Học Đường"> Học Đường</label>
+              <label><input type="checkbox" name="category" value="Hài Hước"> Hài Hước</label>
+              <label><input type="checkbox" name="category" value="Hình Sự"> Hình Sự</label>
+              <label><input type="checkbox" name="category" value="Võ Thuật"> Võ Thuật</label>
+              <label><input type="checkbox" name="category" value="Khoa Học"> Khoa Học</label>
+              <label><input type="checkbox" name="category" value="Thần Thoại"> Thần Thoại</label>
+              <label><input type="checkbox" name="category" value="Chính kịch"> Chính kịch</label>
+              <label><input type="checkbox" name="category" value="Kinh Điển"> Kinh Điển</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="status">Trạng Thái</label>
+            <div class="input-wrapper">
+              <select class="input" id="status" required>
+                <option value="" disabled selected></option>
+                <option value="Đang chiếu">Đang chiếu</option>
+                <option value="Hoàn thành">Hoàn thành</option>
+              </select>
+              <!-- <span>Trạng Thái</span> -->
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="duration">Thời Lượng</label>
+            <div class="input-wrapper">
+              <input class="input" type="text" id="duration" />
+              <!-- <span>Thời Lượng</span> -->
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="altTitle">Tên Tiếng Anh</label>
+            <div class="input-wrapper">
+              <input class="input" type="text" id="altTitle" />
+              <!-- <span>Tên Tiếng Anh</span> -->
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="episodes">Tổng Số Tập</label>
+            <div class="input-wrapper">
+              <input class="input" type="number" id="episodes" min="0" />
+              <!-- <span>Tổng Số Tập</span> -->
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="format">Định Dạng</label>
+            <div class="input-wrapper">
+              <input class="input" type="text" id="format" />
+              <!-- <span>Định Dạng</span> -->
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="subtitles">Phụ Đề</label>
+            <div class="input-wrapper">
+              <input class="input" type="text" id="subtitles" />
+              <!-- <span>Phụ Đề</span> -->
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="type">Thuộc Phim (Lẻ/Bộ)</label>
+            <div class="input-wrapper">
+              <select class="input" id="type">
+                <option value="" disabled selected></option>
+                <option value="Lẻ">Lẻ</option>
+                <option value="Bộ">Bộ</option>
+              </select>
+              <!-- <span>Thuộc Phim</span> -->
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="hot">Phim Có Hot</label>
+            <div class="input-wrapper">
+              <select class="input" id="hot">
+                <option value="" disabled selected></option>
+                <option value="true">Có</option>
+                <option value="false">Không</option>
+              </select>
+              <!-- <span>Phim Có Hot</span> -->
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="videoUrl">Link Xem Phim (iframe)</label>
+            <div class="input-wrapper">
+              <input class="input" type="text" id="videoUrl" required />
+              <!-- <span>Link Xem Phim</span> -->
+            </div>
+          </div>
+          <button type="submit" class="btn-submit">Thêm Phim</button>
+        </form>
+      </div>
+    </main>
+
+    <script src="../assets/js/main.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        if (!currentUser || currentUser.role !== "admin") {
+          alert("Bạn cần đăng nhập với tài khoản admin để thêm phim!");
+          window.location.href = "../index.html";
+          return;
+        }
+
+        document.getElementById("addMovieForm").addEventListener("submit", (e) => {
+          e.preventDefault();
+          const movies = JSON.parse(localStorage.getItem("movies")) || [];
+          const categories = Array.from(document.querySelectorAll('input[name="category"]:checked')).map(cb => cb.value);
+          const newMovie = {
+            id: movies.length ? Math.max(...movies.map(m => m.id)) + 1 : 1,
+            title: document.getElementById("title").value,
+            poster: document.getElementById("posterUrl").value,
+            description: document.getElementById("description").value,
+            category: categories,
+            status: document.getElementById("status").value,
+            duration: document.getElementById("duration").value,
+            altTitle: document.getElementById("altTitle").value,
+            episodes: parseInt(document.getElementById("episodes").value) || 0, format,
+            format: document.getElementById("format").value,
+            subtitles: document.getElementById("subtitles").value,
+            type: document.getElementById("type").value,
+            hot: document.getElementById("hot").value === "true",
+            videoUrl: document.getElementById("videoUrl").value,
+            episodeLinks: {}
+          };
+          movies.push(newMovie);
+          localStorage.setItem("movies", JSON.stringify(movies));
+          alert("Thêm phim thành công!");
+          window.location.href = "manage-movies.html";
+        });
+      });
+    </script>
+</body>
+</html>

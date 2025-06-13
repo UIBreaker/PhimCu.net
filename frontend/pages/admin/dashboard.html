@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="../../assets/css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <style>
+      /* Reset mặc định */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Roboto", sans-serif;
+        background: linear-gradient(135deg, #f0f2f5, #e8ecef);
+        color: #333;
+        line-height: 1.6;
+      }
+
+      /* Container chính */
+      .container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      /* Header */
+      .header {
+        background: linear-gradient(90deg, #1a237e, #3f51b5);
+        color: white;
+        /* padding: 0px 0; */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        margin-top: -100px;
+        z-index: 1000;
+      }
+
+      .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo h1 {
+        font-size: 32px;
+        font-weight: 700;
+        letter-spacing: 1px;
+      }
+
+      .logo a {
+        color: white;
+        text-decoration: none;
+      }
+
+      .header-actions a {
+        color: white;
+        text-decoration: none;
+        margin-left: 25px;
+        font-size: 16px;
+        font-weight: 500;
+        transition: color 0.3s, transform 0.3s;
+      }
+
+      .header-actions a:hover {
+        color: #bbdefb;
+        transform: translateY(-2px);
+      }
+
+      .header-actions a.active {
+        border-bottom: 2px solid #bbdefb;
+        color: #bbdefb;
+      }
+
+      /* Main Content */
+      .main-content {
+        margin-top: 30px;
+      }
+
+      .section-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #1a237e;
+        margin-bottom: 25px;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .main-content p {
+        font-size: 16px;
+        color: #555;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      /* Dashboard Stats */
+      .dashboard-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+      }
+
+      .stat-card {
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .stat-card h3 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1a237e;
+        margin-bottom: 10px;
+      }
+
+      .stat-card p {
+        font-size: 24px;
+        font-weight: 700;
+        color: #3f51b5;
+        margin: 0;
+      }
+
+      /* Responsive Adjustments */
+      @media (max-width: 768px) {
+        .container {
+          padding: 15px;
+        }
+
+        .header-content {
+          flex-direction: column;
+          gap: 15px;
+        }
+
+        .header-actions a {
+          margin-left: 15px;
+          font-size: 14px;
+        }
+
+        .section-title {
+          font-size: 24px;
+        }
+
+        .dashboard-stats {
+          grid-template-columns: 1fr;
+        }
+
+        .stat-card {
+          padding: 15px;
+        }
+
+        .stat-card h3 {
+          font-size: 16px;
+        }
+
+        .stat-card p {
+          font-size: 20px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .section-title {
+          font-size: 20px;
+        }
+
+        .main-content p {
+          font-size: 14px;
+        }
+
+        .stat-card h3 {
+          font-size: 14px;
+        }
+
+        .stat-card p {
+          font-size: 18px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <div class="container">
+        <div class="header-content">
+          <div class="logo">
+            <a href="../index.html"
+              ><h1 style="font-size: 35px">PhimCU.net</h1></a
+            >
+          </div>
+          <div class="header-actions">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="add-movie.html">Thêm Phim</a>
+            <a href="manage-users.html">Quản Lý Người Dùng</a>
+            <a href="manage-movies.html">Quản Lý Phim</a>
+            <a href="../index.html">Quay Lại</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <div class="container">
+        <h2 class="section-title">Admin Dashboard</h2>
+        <p>Chào mừng đến với trang quản trị!</p>
+        <div class="dashboard-stats">
+          <div class="stat-card">
+            <h3>Tổng Số Người Dùng</h3>
+            <p id="totalUsers">0</p>
+          </div>
+          <div class="stat-card">
+            <h3>Tổng Số Phim</h3>
+            <p id="totalMovies">0</p>
+          </div>
+          <div class="stat-card">
+            <h3>Lượt Xem Hôm Nay</h3>
+            <p id="viewsToday">0</p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      // Check if admin is logged in
+      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+      if (!currentUser || currentUser.role !== "admin") {
+        window.location.href = "index.html";
+      }
+
+      // Load stats
+      const users = JSON.parse(localStorage.getItem("users")) || [];
+      const movies = JSON.parse(localStorage.getItem("movies")) || [];
+      document.getElementById("totalUsers").textContent = users.length;
+      document.getElementById("totalMovies").textContent = movies.length;
+      document.getElementById("viewsToday").textContent = Math.floor(
+        Math.random() * 1000
+      ); // Placeholder
+    </script>
+  </body>
+</html>

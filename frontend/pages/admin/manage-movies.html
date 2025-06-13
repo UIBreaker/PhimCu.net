@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản Lý Phim</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Reset mặc định */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Roboto", sans-serif;
+        background: linear-gradient(135deg, #f0f2f5, #e8ecef);
+        color: #333;
+        line-height: 1.6;
+      }
+
+      /* Container chính */
+      .container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      /* Header */
+      .header {
+        background: linear-gradient(90deg, #1a237e, #3f51b5);
+        color: white;
+        padding: 15px 0;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+
+      .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo h1 {
+        font-size: 32px;
+        font-weight: 700;
+        letter-spacing: 1px;
+      }
+
+      .logo a {
+        color: white;
+        text-decoration: none;
+      }
+
+      .header-actions a {
+        color: white;
+        text-decoration: none;
+        margin-left: 25px;
+        font-size: 16px;
+        font-weight: 500;
+        transition: color 0.3s, transform 0.3s;
+      }
+
+      .header-actions a:hover {
+        color: #bbdefb;
+        transform: translateY(-2px);
+      }
+
+      .header-actions a.active {
+        border-bottom: 2px solid #bbdefb;
+        color: #bbdefb;
+      }
+
+      /* Main Content */
+      .main-content {
+        margin-top: 30px;
+      }
+
+      .section-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #1a237e;
+        margin-bottom: 25px;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      /* Search Container */
+      .search-container {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 30px;
+        align-items: center;
+        flex-wrap: wrap;
+        background: #fff;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      }
+
+      .search-bar {
+        flex: 1;
+        max-width: 400px;
+      }
+
+      .search-bar input {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        transition: border-color 0.3s, box-shadow 0.3s;
+      }
+
+      .search-bar input:focus {
+        outline: none;
+        border-color: #3f51b5;
+        box-shadow: 0 0 5px rgba(63, 81, 181, 0.3);
+      }
+
+      .genre-filter {
+        position: relative;
+        max-width: 200px;
+      }
+
+      .genre-filter-btn {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        background: #fff;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: background 0.3s, box-shadow 0.3s;
+      }
+
+      .genre-filter-btn:hover {
+        background: #f8fafc;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .genre-checkboxes {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 15px;
+        max-height: 300px;
+        overflow-y: auto;
+        z-index: 1000;
+        width: 100%;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+      }
+
+      .genre-checkboxes.show {
+        display: block;
+      }
+
+      .genre-checkboxes label {
+        display: block;
+        padding: 8px 0;
+        font-size: 14px;
+        cursor: pointer;
+      }
+
+      .genre-checkboxes input[type="checkbox"] {
+        margin-right: 10px;
+        accent-color: #3f51b5;
+      }
+
+      /* Sync API */
+      .sync-api {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .sync-api input {
+        padding: 12px;
+        font-size: 16px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        transition: border-color 0.3s, box-shadow 0.3s;
+      }
+
+      .sync-api input:focus {
+        outline: none;
+        border-color: #3f51b5;
+        box-shadow: 0 0 5px rgba(63, 81, 181, 0.3);
+      }
+
+      .sync-api button {
+        padding: 12px 20px;
+        font-size: 16px;
+        font-weight: 500;
+        border: none;
+        border-radius: 6px;
+        background: linear-gradient(90deg, #28a745, #2ecc71);
+        color: white;
+        cursor: pointer;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .sync-api button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 10px rgba(40, 167, 69, 0.3);
+      }
+
+      /* Movie Grid */
+      .movie-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 25px;
+      }
+
+      .movie-item {
+        background: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .movie-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      .movie-poster img {
+        width: 100%;
+        height: 477px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 15px;
+      }
+
+      .movie-details h3 {
+        font-size: 20px;
+        font-weight: 700;
+        color: #1a237e;
+        margin-bottom: 10px;
+      }
+
+      .movie-details p {
+        font-size: 14px;
+        color: #555;
+        margin: 5px 0;
+      }
+
+      .movie-details p strong {
+        color: #333;
+      }
+
+      .movie-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 15px;
+      }
+
+      .btn-action {
+        padding: 10px 15px;
+        font-size: 14px;
+        font-weight: 500;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        color: white;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .btn-action:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .btn-add-episode {
+        background: linear-gradient(90deg, #007bff, #2196f3);
+      }
+
+      .btn-edit-movie {
+        background: linear-gradient(90deg, #ffc107, #ffca28);
+      }
+
+      .btn-delete-movie {
+        background: linear-gradient(90deg, #dc3545, #ef5350);
+      }
+
+      /* Scroll to Top Button */
+      .scroll-to-top {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: linear-gradient(135deg, #3f51b5, #5c6bc0);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+        cursor: pointer;
+        display: none;
+        z-index: 1000;
+        transition: transform 0.3s, opacity 0.3s, box-shadow 0.3s;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .scroll-to-top:hover {
+        transform: scale(1.1);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      /* Modal */
+      .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+        animation: fadeIn 0.3s gosh ease-in-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .modal-content {
+        background: #fff;
+        padding: 25px;
+        border-radius: 10px;
+        width: 90%;
+        max-width: 600px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        animation: slideIn 0.3s ease-in-out;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateY(-50px);
+          opacity: 0;
+        }
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .modal-content h3 {
+        font-size: 20px;
+        font-weight: 700;
+        color: #1a237e;
+        margin-bottom: 15px;
+      }
+
+      .modal-content textarea {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        resize: vertical;
+        min-height: 150px;
+        transition: border-color 0.3s, box-shadow 0.3s;
+      }
+
+      .modal-content textarea:focus {
+        outline: none;
+        border-color: #3f51b5;
+        box-shadow: 0 0 5px rgba(63, 81, 181, 0.3);
+      }
+
+      .modal-actions {
+        margin-top: 20px;
+        display: flex;
+        gap: 15px;
+        justify-content: flex-end;
+      }
+
+      .modal-actions .btn-action {
+        padding: 10px 20px;
+      }
+
+      /* Màu cho nút Lưu và Hủy */
+      .btn-save {
+        background: linear-gradient(90deg, #28a745, #2ecc71);
+      }
+
+      .btn-save:hover {
+        background: linear-gradient(90deg, #218838, #27ae60);
+      }
+
+      .btn-cancel {
+        background: linear-gradient(90deg, #6c757d, #adb5bd);
+      }
+
+      .btn-cancel:hover {
+        background: linear-gradient(90deg, #5a6268, #8e979e);
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .search-container {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .search-bar,
+        .genre-filter,
+        .sync-api {
+          max-width: 100%;
+        }
+
+        .movie-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .header-content {
+          flex-direction: column;
+          gap: 15px;
+        }
+
+        .header-actions a {
+          margin-left: 15px;
+          font-size: 14px;
+        }
+
+        .scroll-to-top {
+          width: 50px;
+          height: 50px;
+          font-size: 20px;
+          bottom: 20px;
+          right: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <div class="container">
+        <div class="header-content">
+          <div class="logo">
+            <a href="../index.html"><h1>PhimCU.net</h1></a>
+          </div>
+          <div class="header-actions">
+            <a href="dashboard.html">Dashboard</a>
+            <a href="add-movie.html">Thêm Phim</a>
+            <a href="manage-users.html">Quản Lý Người Dùng</a>
+            <a href="manage-movies.html" class="active">Quản Lý Phim</a>
+            <a href="../index.html">Quay Lại</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <div class="container">
+        <h2 class="section-title">Quản Lý Phim</h2>
+        <div class="search-container">
+          <div class="search-bar">
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Tìm kiếm theo tên phim..."
+            />
+          </div>
+          <div class="genre-filter">
+            <button class="genre-filter-btn" id="genreFilterBtn">
+              Lọc theo thể loại <i class="fas fa-caret-down"></i>
+            </button>
+            <div class="genre-checkboxes" id="genreCheckboxes">
+              <label
+                ><input type="checkbox" name="genre" value="Hành Động" /> Hành
+                Động</label
+              >
+              <label
+                ><input type="checkbox" name="genre" value="Cổ Trang" /> Cổ
+                Trang</label
+              >
+              <label
+                ><input type="checkbox" name="genre" value="Chiến Tranh" />
+                Chiến Tranh</label
+              >
+              <label
+                ><input type="checkbox" name="genre" value="Viễn Tưởng" /> Viễn
+                Tưởng</label
+              >
+              <label
+                ><input type="checkbox" name="genre" value="Kinh Dị" /> Kinh
+                Dị</label
+              >
+              <label
+                ><input type="checkbox" name="genre" value="Tài Liệu" /> Tài
+                Liệu</label
+              >
+              <label
+                ><input type="checkbox" name="genre" value="Bí ẩn" /> Bí
+                ẩn</label
+              >
+              <label
+                ><input type="checkbox" name="genre" value="Phim 18+" /> Phim
+                18+</label
+              >
+              <label
+                ><input type="checkbox" name="genre" value="Tình Cảm" /> Tình
+                Cảm</label
+              >
+              <label
+                ><input type="checkbox" name="genre" value="Tâm Lý" /> Tâm
+                Lý</label
+              >
+              <label
+                ><input type="checkbox" name="genre" value="Thể Thao" /> Thể
+                Thao</label
+              >
+              <label
+                ><input type="checkbox" name="genre" value="Phiêu Lưu" /> Phiêu
+                Lưu</label
+              >
+              <label
+                ><input type="checkbox" name="genre" value="Âm Nhạc" /> Âm
+                Nhạc</label
+              >
+              <label
+                ><input type="checkbox" name="genre" value="Gia Đình" /> Gia
+                Đình</label
+              >
+              <label
+                ><input type="checkbox" name="genre" value="Học Đường" /> Học
+                Đường</label
+              >
+              <label
+                ><input type="checkbox" name="genre" value="Hài Hước" /> Hài
+                Hước</label
+              >
+              <label
+                ><input type="checkbox" name="genre" value="Hình Sự" /> Hình
+                Sự</label
+              >
+              <label
+                ><input type="checkbox" name="genre" value="Võ Thuật" /> Võ
+                Thuật</label
+              >
+              <label
+                ><input type="checkbox" name="genre" value="Khoa Học" /> Khoa
+                Học</label
+              >
+              <label
+                ><input type="checkbox" name="genre" value="Thần Thoại" /> Thần
+                Thoại</label
+              >
+              <label
+                ><input type="checkbox" name="genre" value="Chính kịch" /> Chính
+                kịch</label
+              >
+              <label
+                ><input type="checkbox" name="genre" value="Kinh Điển" /> Kinh
+                Điển</label
+              >
+            </div>
+          </div>
+          <div class="sync-api">
+            <input
+              type="text"
+              id="apiUrlInput"
+              placeholder="Nhập URL API phim..."
+            />
+            <button id="syncApiBtn" class="btn-action">Đồng bộ từ API</button>
+          </div>
+        </div>
+        <div id="movieManagement">
+          <div id="movieList" class="movie-grid"></div>
+        </div>
+      </div>
+    </main>
+    <button
+      class="scroll-to-top"
+      id="scrollToTopBtn"
+      title="Cuộn lên đầu trang"
+    >
+      <i class="fas fa-arrow-up"></i>
+    </button>
+    <div class="modal" id="batchAddEpisodeModal">
+      <div class="modal-content">
+        <h3>Thêm hàng loạt tập phim</h3>
+        <textarea
+          id="batchEpisodeInput"
+          rows="10"
+          cols="50"
+          placeholder="Nhập danh sách tập phim (định dạng: số tập|link server, mỗi dòng một tập)"
+        ></textarea>
+        <div class="modal-actions">
+          <button id="saveBatchEpisodes" class="btn-action btn-save">
+            Lưu
+          </button>
+          <button id="cancelBatchEpisodes" class="btn-action btn-cancel">
+            Hủy
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      document.addEventListener("DOMContentLoaded", () => {
+        // Kiểm tra quyền admin
+        let currentUser;
+        try {
+          currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        } catch (error) {
+          console.error("Lỗi khi parse currentUser:", error);
+        }
+        if (!currentUser || currentUser.role !== "admin") {
+          alert("Bạn cần đăng nhập với tài khoản admin để quản lý phim!");
+          window.location.href = "../index.html";
+          return;
+        }
+
+        // Lấy danh sách phim
+        let movies = [];
+        try {
+          movies = JSON.parse(localStorage.getItem("movies")) || [];
+          if (!Array.isArray(movies)) {
+            movies = [];
+            localStorage.setItem("movies", JSON.stringify(movies));
+          }
+        } catch (error) {
+          console.error("Lỗi khi parse movies:", error);
+        }
+
+        const movieList = document.getElementById("movieList");
+        const searchInput = document.getElementById("searchInput");
+        const genreFilterBtn = document.getElementById("genreFilterBtn");
+        const genreCheckboxes = document.getElementById("genreCheckboxes");
+        const scrollToTopBtn = document.getElementById("scrollToTopBtn");
+        const batchAddEpisodeModal = document.getElementById(
+          "batchAddEpisodeModal"
+        );
+        const batchEpisodeInput = document.getElementById("batchEpisodeInput");
+        const saveBatchEpisodes = document.getElementById("saveBatchEpisodes");
+        const cancelBatchEpisodes = document.getElementById(
+          "cancelBatchEpisodes"
+        );
+        const syncApiBtn = document.getElementById("syncApiBtn");
+        const apiUrlInput = document.getElementById("apiUrlInput");
+
+        // Hàm hiển thị danh sách phim
+        const displayMovies = (moviesToDisplay) => {
+          if (moviesToDisplay.length === 0) {
+            movieList.innerHTML = "<p>Chưa có phim nào trong danh sách.</p>";
+          } else {
+            movieList.innerHTML = moviesToDisplay
+              .map((movie) => {
+                const movieId = movie.id || movie._id || "";
+                return `
+                <div class="movie-item">
+                  <div class="movie-poster">
+                    <img src="${
+                      movie.poster || "https://via.placeholder.com/150"
+                    }" alt="${movie.title || "Không có tiêu đề"}">
+                  </div>
+                  <div class="movie-details">
+                    <h3 class="movie-title">${movie.title || "??"}</h3>
+                    <p><strong>Trạng thái:</strong> ${movie.status || "??"}</p>
+                    <p><strong>Tổng số tập:</strong> ${
+                      movie.episodes || "0"
+                    }</p>
+                    <p><strong>Thời lượng:</strong> ${
+                      movie.duration || "??"
+                    }</p>
+                    <p><strong>Tên tiếng Anh:</strong> ${
+                      movie.altTitle || "??"
+                    }</p>
+                    <p><strong>Mô tả:</strong> ${movie.description || "??"}</p>
+                    <p><strong>Thể loại:</strong> ${
+                      Array.isArray(movie.category)
+                        ? movie.category.join(", ")
+                        : movie.category || "??"
+                    }</p>
+                    <p><strong>Định dạng:</strong> ${movie.format || "??"}</p>
+                    <p><strong>Phụ đề:</strong> ${movie.subtitles || "??"}</p>
+                    <p><strong>Thuộc phim:</strong> ${movie.type || "??"}</p>
+                    <p><strong>Phim có hot:</strong> ${
+                      movie.hot ? "Có" : "Không"
+                    }</p>
+                    <div class="movie-actions">
+                      <button class="btn-action btn-add-episode" data-movie-id="${movieId}">Thêm tập phim</button>
+                      <button class="btn-action btn-edit-movie" data-movie-id="${movieId}">Sửa phim</button>
+                      <button class="btn-action btn-delete-movie" data-movie-id="${movieId}">Xóa phim</button>
+                    </div>
+                  </div>
+                </div>
+                `;
+              })
+              .join("");
+          }
+        };
+
+        // Hiển thị danh sách phim ban đầu
+        displayMovies(movies);
+
+        // Tìm kiếm và lọc phim
+        const filterMovies = () => {
+          const searchTerm = searchInput.value.toLowerCase();
+          const selectedGenres = Array.from(
+            genreCheckboxes.querySelectorAll('input[name="genre"]:checked')
+          ).map((cb) => cb.value);
+
+          const filteredMovies = movies.filter((movie) => {
+            const matchesTitle = (movie.title || "")
+              .toLowerCase()
+              .includes(searchTerm);
+            const matchesGenre =
+              selectedGenres.length === 0 ||
+              (Array.isArray(movie.category) &&
+                selectedGenres.every((genre) =>
+                  movie.category.includes(genre)
+                ));
+            return matchesTitle && matchesGenre;
+          });
+
+          displayMovies(filteredMovies);
+        };
+
+        // Toggle hiển thị danh sách checkbox thể loại
+        genreFilterBtn.addEventListener("click", () => {
+          genreCheckboxes.classList.toggle("show");
+        });
+
+        // Đóng danh sách checkbox khi click ra ngoài
+        document.addEventListener("click", (e) => {
+          if (
+            !genreFilterBtn.contains(e.target) &&
+            !genreCheckboxes.contains(e.target)
+          ) {
+            genreCheckboxes.classList.remove("show");
+          }
+        });
+
+        // Lọc phim khi thay đổi checkbox hoặc nhập tìm kiếm
+        genreCheckboxes.addEventListener("change", filterMovies);
+        searchInput.addEventListener("input", filterMovies);
+
+        // Cuộn lên đầu trang
+        scrollToTopBtn.addEventListener("click", () => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+        // Hiển thị/ẩn nút cuộn lên đầu
+        window.addEventListener("scroll", () => {
+          if (window.scrollY > 300) {
+            scrollToTopBtn.style.display = "flex";
+          } else {
+            scrollToTopBtn.style.display = "none";
+          }
+        });
+
+        // Thêm hàng loạt tập phim
+        movieList.addEventListener("click", (e) => {
+          const movieId = e.target.dataset.movieId;
+          if (!movieId) return;
+
+          const movie = movies.find((m) => m.id == movieId || m._id == movieId);
+          if (!movie) {
+            alert("Không tìm thấy phim!");
+            return;
+          }
+
+          if (e.target.classList.contains("btn-add-episode")) {
+            batchAddEpisodeModal.style.display = "flex";
+            batchEpisodeInput.dataset.movieId = movieId;
+          } else if (e.target.classList.contains("btn-edit-movie")) {
+            const newTitle = prompt("Nhập tên phim mới:", movie.title || "");
+            const newPoster = prompt(
+              "Nhập URL poster mới:",
+              movie.poster || ""
+            );
+            const newDescription = prompt(
+              "Nhập mô tả mới:",
+              movie.description || ""
+            );
+            const newCategory = prompt(
+              "Nhập thể loại (cách nhau bằng dấu phẩy):",
+              Array.isArray(movie.category)
+                ? movie.category.join(", ")
+                : movie.category || ""
+            );
+            const newStatus = prompt(
+              "Nhập trạng thái (Đang chiếu/Hoàn thành):",
+              movie.status || ""
+            );
+            const newDuration = prompt(
+              "Nhập thời lượng mới:",
+              movie.duration || ""
+            );
+            const newAltTitle = prompt(
+              "Nhập tên tiếng Anh mới:",
+              movie.altTitle || ""
+            );
+            const newEpisodes = prompt(
+              "Nhập tổng số tập mới:",
+              movie.episodes || "0"
+            );
+            const newFormat = prompt("Nhập định dạng mới:", movie.format || "");
+            const newSubtitles = prompt(
+              "Nhập phụ đề mới:",
+              movie.subtitles || ""
+            );
+            const newType = prompt("Nhập loại phim (Lẻ/Bộ):", movie.type || "");
+            const newHot = prompt(
+              "Phim có hot (Có/Không):",
+              movie.hot ? "Có" : "Không"
+            );
+            const newVideoUrl = prompt(
+              " GCó lỗi xảy ra khi đồng bộ từ API!hìm mới:",
+              movie.videoUrl || ""
+            );
+
+            if (
+              newTitle ||
+              newPoster ||
+              newDescription ||
+              newCategory ||
+              newStatus ||
+              newDuration ||
+              newAltTitle ||
+              newEpisodes ||
+              newFormat ||
+              newSubtitles ||
+              newType ||
+              newHot ||
+              newVideoUrl
+            ) {
+              movie.title = newTitle || movie.title;
+              movie.poster = newPoster || movie.poster;
+              movie.description = newDescription || movie.description;
+              movie.category = newCategory
+                ? newCategory.split(",").map((c) => c.trim())
+                : movie.category;
+              movie.status = newStatus || movie.status;
+              movie.duration = newDuration || movie.duration;
+              movie.altTitle = newAltTitle || movie.altTitle;
+              movie.episodes = newEpisodes
+                ? parseInt(newEpisodes)
+                : movie.episodes;
+              movie.format = newFormat || movie.format;
+              movie.subtitles = newSubtitles || movie.subtitles;
+              movie.type = newType || movie.type;
+              movie.hot =
+                newHot === "Có" ? true : newHot === "Không" ? false : movie.hot;
+              movie.videoUrl = newVideoUrl || movie.videoUrl;
+              localStorage.setItem("movies", JSON.stringify(movies));
+              alert("Cập nhật phim thành công!");
+              displayMovies(movies);
+            }
+          } else if (e.target.classList.contains("btn-delete-movie")) {
+            if (confirm("Bạn có chắc muốn xóa phim này?")) {
+              movies = movies.filter(
+                (m) => m.id != movieId && m._id != movieId
+              );
+              localStorage.setItem("movies", JSON.stringify(movies));
+              alert("Xóa phim thành công!");
+              displayMovies(movies);
+            }
+          }
+        });
+
+        // Hủy modal thêm tập phim
+        cancelBatchEpisodes.addEventListener("click", () => {
+          batchAddEpisodeModal.style.display = "none";
+          batchEpisodeInput.value = "";
+        });
+
+        // Lưu danh sách tập phim
+        saveBatchEpisodes.addEventListener("click", () => {
+          const movieId = batchEpisodeInput.dataset.movieId;
+          const movie = movies.find((m) => m.id == movieId || m._id == movieId);
+          if (!movie) {
+            alert("Không tìm thấy phim!");
+            return;
+          }
+
+          const episodeData = batchEpisodeInput.value.trim();
+          if (!episodeData) {
+            alert("Vui lòng nhập danh sách tập phim!");
+            return;
+          }
+
+          const episodeLines = episodeData
+            .split("\n")
+            .map((line) => line.trim());
+          let maxEpisode = movie.episodes || 0;
+          movie.episodeLinks = movie.episodeLinks || {};
+
+          episodeLines.forEach((line) => {
+            const [episodeNum, serverLink] = line
+              .split("|")
+              .map((item) => item.trim());
+            if (episodeNum && serverLink) {
+              const episodeNumber = parseInt(episodeNum);
+              if (!isNaN(episodeNumber)) {
+                movie.episodeLinks[episodeNumber] = serverLink;
+                maxEpisode = Math.max(maxEpisode, episodeNumber);
+              }
+            }
+          });
+
+          movie.episodes = maxEpisode;
+          localStorage.setItem("movies", JSON.stringify(movies));
+          alert("Thêm hàng loạt tập phim thành công!");
+          displayMovies(movies);
+          batchAddEpisodeModal.style.display = "none";
+          batchEpisodeInput.value = "";
+        });
+
+        // Đồng bộ từ API
+        syncApiBtn.addEventListener("click", async () => {
+          const apiUrl = apiUrlInput.value.trim();
+          if (!apiUrl) {
+            alert("Vui lòng nhập URL API!");
+            return;
+          }
+
+          try {
+            const response = await fetch(apiUrl);
+            if (!response.ok) throw new Error("Lỗi khi gọi API");
+            const movieData = await response.json();
+
+            const newMovie = {
+              id: movieData.id || Date.now().toString(),
+              title: movieData.title || "Không có tiêu đề",
+              poster: movieData.poster || "https://via.placeholder.com/150",
+              description: movieData.description || "",
+              category: movieData.category || [],
+              status: movieData.status || "Đang chiếu",
+              episodes: movieData.episodes || 0,
+              episodeLinks: movieData.episodeLinks || {},
+              duration: movieData.duration || "",
+              altTitle: movieData.altTitle || "",
+              format: movieData.format || "",
+              subtitles: movieData.subtitles || "",
+              type: movieData.type || "Bộ",
+              hot: movieData.hot || false,
+              videoUrl: movieData.videoUrl || "",
+            };
+
+            movies.push(newMovie);
+            localStorage.setItem("movies", JSON.stringify(movies));
+            alert("Đồng bộ phim từ API thành công!");
+            displayMovies(movies);
+          } catch (error) {
+            console.error("Lỗi khi đồng bộ từ API:", error);
+            alert("Có lỗi xảy ra khi đồng bộ từ API!");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

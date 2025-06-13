@@ -1,0 +1,160 @@
+/* Định dạng chung */
+body {
+  background-color: #1a1f2e;
+  color: #ffffff;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header */
+.header {
+  background-color: #1a2a44;
+  padding: 10px 0;
+  border-bottom: 1px solid #2a3550;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo h1 {
+  margin: 0;
+  font-size: 24px;
+  color: #2ecc71;
+}
+
+.header-actions a {
+  color: #ffffff;
+  text-decoration: none;
+  margin-left: 15px;
+  font-size: 16px;
+}
+
+.header-actions a:hover {
+  color: #2ecc71;
+}
+
+.header-actions .active {
+  font-weight: bold;
+}
+
+/* Tiêu đề section */
+.section-title {
+  color: #2ecc71;
+  font-size: 28px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Danh sách phim theo hàng ngang (lưới) */
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(800px, 1fr));
+  gap: 20px;
+}
+
+.movie-item {
+  display: flex;
+  background-color: #1a2a44;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s;
+}
+
+.movie-item:hover {
+  transform: translateY(-5px);
+}
+
+.movie-poster {
+  width: 200px;
+  height: auto;
+}
+
+.movie-poster img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.movie-details {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.movie-title {
+  margin: 0 0 10px 0;
+  font-size: 20px;
+  color: #2ecc71;
+}
+
+.movie-details p {
+  margin: 5px 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.movie-details p strong {
+  color: #ffffff;
+  min-width: 100px;
+  display: inline-block;
+}
+
+.movie-actions {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+}
+
+.btn-action {
+  padding: 8px 15px;
+  background-color: #2ecc71;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.btn-action:hover {
+  background-color: #27ae60;
+}
+
+.btn-delete-movie {
+  background-color: #e74c3c;
+}
+
+.btn-delete-movie:hover {
+  background-color: #c0392b;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .movie-grid {
+    grid-template-columns: 1fr;
+  }
+  .movie-item {
+    flex-direction: column;
+  }
+  .movie-poster {
+    width: 100%;
+    max-width: 200px;
+    margin: 0 auto;
+  }
+  .movie-details {
+    padding: 15px;
+  }
+}

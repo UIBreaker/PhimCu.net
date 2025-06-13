@@ -1,0 +1,129 @@
+body {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: #fff;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+.header {
+  background: rgba(26, 26, 46, 0.9);
+  padding: 1rem 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.logo h1 {
+  color: #4ecdc4;
+  margin: 0;
+  font-size: 1.5rem;
+}
+.header-actions a {
+  color: #4ecdc4;
+  margin: 0 1rem;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+.header-actions a:hover {
+  color: #ff6b6b;
+}
+.main-content {
+  padding: 2rem 0;
+}
+.section-title {
+  font-size: 2rem;
+  background: linear-gradient(45deg, #ff9900, #ff6b6b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1rem;
+}
+.profile-container {
+  display: flex;
+  gap: 2rem;
+}
+.profile-avatar {
+  flex: 0 0 200px;
+  text-align: center;
+}
+.profile-avatar img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #4ecdc4;
+}
+.profile-avatar button {
+  background: linear-gradient(45deg, #ff9900, #ff6b6b);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-top: 0.5rem;
+}
+.profile-avatar button:hover {
+  background: linear-gradient(45deg, #ff6b6b, #ff9900);
+}
+.profile-info {
+  flex: 1;
+  background: rgba(26, 26, 46, 0.9);
+  padding: 1.5rem;
+  border-radius: 10px;
+}
+.profile-info .info-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.profile-info .info-item label {
+  flex: 0 0 150px;
+  font-weight: 600;
+  color: #ccc;
+}
+.profile-info .info-item input {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 1rem;
+}
+.profile-info .info-item button {
+  background: #00aaff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-left: 0.5rem;
+}
+.profile-info .info-item button:hover {
+  background: #0099e6;
+}
+.profile-info .info-item .google-link {
+  background: #dd4b39;
+  margin-left: 0.5rem;
+}
+.profile-info .info-item .google-link:hover {
+  background: #c23321;
+}
+.profile-info .info-item .save-btn {
+  background: #28a745;
+  margin-top: 1rem;
+}
+.profile-info .info-item .save-btn:hover {
+  background: #218838;
+}
