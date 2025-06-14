@@ -749,3 +749,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 /////////////////////////////////////////////////////////////////////////////////
+// In main.js
+const hotMovies = movies
+  .sort((a, b) => (b.views || 0) - (a.views || 0))
+  .slice(0, 4);
+document.querySelector(".footer-section ul").innerHTML = hotMovies
+  .map(
+    (movie) =>
+      `<li><a href="movie-detail.html?id=${movie.id}">${movie.title}</a></li>`
+  )
+  .join("");
